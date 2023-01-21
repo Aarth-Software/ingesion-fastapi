@@ -1,0 +1,5 @@
+neo4j_acc/.env
+.idea
+.ipynb_checkpoints
+poetry.lock
+log.txt
