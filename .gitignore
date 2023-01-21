@@ -3,3 +3,4 @@ neo4j_acc/.env
 .ipynb_checkpoints
 poetry.lock
 log.txt
+.DS_Store
