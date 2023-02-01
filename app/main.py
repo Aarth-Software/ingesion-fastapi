@@ -4,7 +4,6 @@ import sys
 import time
 from typing import Any, Dict
 
-import graphistry
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from neo4j import GraphDatabase  # for data loader
@@ -13,14 +12,6 @@ load_dotenv()
 uri=os.getenv("uri")
 user=os.getenv("user")
 pwd=os.getenv("pwd")
-
-
-# graphistry.register(api=3, username='jagadeesh_aarth', password='Prat2020')
-# graphistry.register(api=3, token=initial_one_hour_token)
-# graphistry.register(api=3,personal_key_id='N11OMK682O', personal_key_secret='3D9JMTGATJNRQXE0', protocol='https', server='hub.graphistry.com')
-NEO4J={'uri':"bolt://localhost:7687", 'auth':("neo4j", "Admin@123")}
-graphistry.register(bolt=NEO4J)
-
 
 def connection():
   driver=GraphDatabase.driver(uri=uri,auth=(user,pwd))
@@ -54,9 +45,7 @@ async def create_journal(request:Dict = None):
     pwd=str(os.getenv("pwd"))
     driver=GraphDatabase.driver(uri=uri,auth=(user,pwd))
     session=driver.session()
-    data=request #.decode('utf-8')
-    # data= json.load(codecs.decode(request.data,'utf-8-sig'))
-    # print (data)
+    data=request 
     keys=list(data.keys())
     simple_keys=[]
     for key in keys:

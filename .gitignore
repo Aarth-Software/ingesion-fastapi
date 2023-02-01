@@ -4,3 +4,5 @@ neo4j_acc/.env
 poetry.lock
 log.txt
 .DS_Store
+app/__pycache__
+app/.env

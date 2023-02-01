@@ -74,6 +74,7 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
       - ./infra/postgres:/docker-entrypoint-initdb.d
+      - ./infra/postgres/postgresql.conf:/usr/local/pgsql/data/postgresql.conf
 
   react-app:
     build:
