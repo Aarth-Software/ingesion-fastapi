@@ -199,10 +199,10 @@ async def create_journal(request:Dict = None):
     "referenceDOIURL":referenceDOIURL}    
 
 
-    q="""MERGE (iv:`Construct Role`:`Independent Variable`)
-    MERGE (dv:`Construct Role`:`Dependent Variable`)
-    MERGE (mv1:`Construct Role`:`Moderator Variable`)
-    MERGE (mv2:`Construct Role`:`Mediator Variable`)
+    q="""MERGE (iv:ConstructRole:IndependentVariable)
+    MERGE (dv:ConstructRole:DependenVariable)
+    MERGE (mv1:ConstructRole:ModeratorVariable)
+    MERGE (mv2:ConstructRole:MediatorVariable)
     MERGE (e:Empirical)
     MERGE (c:Conceptual)"""
 
@@ -218,9 +218,9 @@ async def create_journal(request:Dict = None):
     MERGE (a)-[:CONTRIBUTED_TO]->(p)
     MERGE (a)-[:FUNDED_BY]->(f)
     MERGE (d)<-[r1:USED]-(a)
-    set r1.referenceTitle=$referenceTitle, r1.referenceDOIURL=$referenceDOIURL
+    on match set r1.referenceTitle=$referenceTitle, r1.referenceDOIURL=$referenceDOIURL
     MERGE (m)<-[r2:USED]-(a)
-    set r2.referenceTitle=$referenceTitle, r2.referenceDOIURL=$referenceDOIURL;
+    on match set r2.referenceTitle=$referenceTitle, r2.referenceDOIURL=$referenceDOIURL;
     match(j:JournalReference)-[:AUTHORED_BY]->(a:Author),(af:Affiliation), (c:Construct)
     where  j.doi=$referenceDOI 
     and a.scopusID in af.authorScopusID and j.doi=c.doi 
@@ -258,21 +258,21 @@ async def create_journal(request:Dict = None):
     MATCH (c:Construct)<-[:STUDIED]-(j:JournalReference)-[:STUDIED]->(h:Hypothesis)
     where j.doi=$referenceDOI and c.hypothesisID=h.hypothesisID
     MERGE (h)-[r:STUDIED]->(c)
-    set r.referenceTitle=$referenceTitle, r.referenceDOIURL=$referenceDOIURL;
+    on match set r.referenceTitle=$referenceTitle, r.referenceDOIURL=$referenceDOIURL;
     MATCH (c:Construct)<-[:STUDIED]-(j:JournalReference)-[:STUDIED]->(p:Proposition)
     where j.doi=$referenceDOI and c.propositionID=p.propositionID
     MERGE (p)-[r:STUDIED]->(c)
-    set r.referenceTitle=$referenceTitle, r.referenceDOIURL=$referenceDOIURL;
-    MATCH (c:Construct), (iv:`Independent Variable`)
+    on match set r.referenceTitle=$referenceTitle, r.referenceDOIURL=$referenceDOIURL;
+    MATCH (c:Construct), (iv:IndependentVariable)
     WHERE c.ConstructRole = "IndependentVariable" and c.doi=$referenceDOI
     MERGE (c)-[:AS]->(iv);
-    MATCH (c:Construct), (dv:`Dependent Variable`)
+    MATCH (c:Construct), (dv:DependentVariable)
     WHERE c.ConstructRole = "DependentVariable" and c.doi=$referenceDOI
     MERGE (c)-[:AS]->(dv);
-    MATCH (c:Construct), (mv:`Mediator Variable`)
+    MATCH (c:Construct), (mv:MediatorVariable)
     WHERE c.ConstructRole = "Mediator" and c.doi=$referenceDOI
     MERGE (c)-[:AS]->(mv);
-    MATCH (c:Construct), (mv:`Moderator Variable`)
+    MATCH (c:Construct), (mv:ModeratorVariable)
     WHERE c.ConstructRole = "Moderator" and c.doi=$referenceDOI
     MERGE (c)-[:AS]->(mv);
     match(j:JournalReference),(co:Conceptual)

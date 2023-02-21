@@ -5,10 +5,10 @@ networks:
 services:
   app1:
     build:
-      context: /Users/apple/neo4j/carleton-fastapi
+      context: /Users/apple/neo4j/ingesion-fastapi
     ports:
       - "8000:8000"
-    container_name: carleton-fastapi
+    container_name: ingesion-fastapi
     networks:
       - litdigNetwork
   app2:
