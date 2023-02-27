@@ -200,7 +200,7 @@ async def create_journal(request:Dict = None):
 
 
     q="""MERGE (iv:ConstructRole:IndependentVariable)
-    MERGE (dv:ConstructRole:DependenVariable)
+    MERGE (dv:ConstructRole:DependentVariable)
     MERGE (mv1:ConstructRole:ModeratorVariable)
     MERGE (mv2:ConstructRole:MediatorVariable)
     MERGE (e:Empirical)
@@ -264,16 +264,16 @@ async def create_journal(request:Dict = None):
     MERGE (p)-[r:STUDIED]->(c)
     on match set r.referenceTitle=$referenceTitle, r.referenceDOIURL=$referenceDOIURL;
     MATCH (c:Construct), (iv:IndependentVariable)
-    WHERE c.ConstructRole = "IndependentVariable" and c.doi=$referenceDOI
+    WHERE c.constructRole = "IndependentVariable" and c.doi=$referenceDOI
     MERGE (c)-[:AS]->(iv);
     MATCH (c:Construct), (dv:DependentVariable)
-    WHERE c.ConstructRole = "DependentVariable" and c.doi=$referenceDOI
+    WHERE c.constructRole = "DependentVariable" and c.doi=$referenceDOI
     MERGE (c)-[:AS]->(dv);
     MATCH (c:Construct), (mv:MediatorVariable)
-    WHERE c.ConstructRole = "Mediator" and c.doi=$referenceDOI
+    WHERE c.constructRole = "Mediator" and c.doi=$referenceDOI
     MERGE (c)-[:AS]->(mv);
     MATCH (c:Construct), (mv:ModeratorVariable)
-    WHERE c.ConstructRole = "Moderator" and c.doi=$referenceDOI
+    WHERE c.constructRole = "Moderator" and c.doi=$referenceDOI
     MERGE (c)-[:AS]->(mv);
     match(j:JournalReference),(co:Conceptual)
     where  j.doi=$referenceDOI and j.isConceptual="True"
